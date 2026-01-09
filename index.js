@@ -1,5 +1,5 @@
 // INSTRUCTIONS: Write the code that does the following:
-// -0 Set up the server correctly
+// -0 Set up the server correctly (done)
 // -1 console logs the method and URL for every request
 // -2 sends back "Welcome to the Animal Shelter Network" as an h1 when the client goes to /
 // -3 sends back the cat object when the client goes to /api/cat
@@ -10,6 +10,8 @@
 // -7 sends back a 404 page for all other paths
 
 // PINK Only: Add the correct status codes to ALL route handlers
+const express = require('express')
+const app = express();
 
 const animalShelterData = {
     cats: [
@@ -22,3 +24,32 @@ const animalShelterData = {
         { name: "Cozy Paws Sanctuary", location: "456 Oak Avenue, Townsburg" }
     ]
 };
+app.use((req, res, next) =>{
+    console.log(req.method + " " + req.url)
+    next()
+})
+
+app.get("/", (req, res)=>{
+    res.send("Welcome to the Animal Shelter Network!")
+});
+
+app.get("/api/cat", (req,res)=>{
+    res.json(animalShelterData.cats)
+});
+
+app.get("/api/shelter",(req,res)=>{
+    res.json(animalShelterData.shelters)
+});
+
+app.get("/docs", (req,res)=>{
+    res.send("Go to /api/cat to see cats for adoption and /api/shelters to see shelters in the area")
+});
+
+
+app.use((req, res, next) =>{
+    res.status(404).send("404 not FOUND!")
+})
+
+app.listen(3000,()=>{
+console.log("server is running")
+})
